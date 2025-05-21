@@ -76,6 +76,7 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 
 // Extraction du profile_id (chemin donné)
 $path = ['require', 0, 3, 0, '__bbox', 'require', 8, 3, 0, 'initialRouteInfo', 'route', 'rootView', 'props', 'page_logging', 'params', 'profile_id'];
+var_dump($data) ;
 
 $profile_id = $data;
 foreach ($path as $key) {
