@@ -42,7 +42,7 @@ if ($debug) {
 
 // Découpage du HTML par balise </script>
 $parts = explode('</script>', $html);
-
+var_dump($parts) ;
 // Index supposé contenant le JSON
 $index = 37;
 
@@ -81,7 +81,7 @@ if ($debug) {
 
 // Décodage JSON
 $data = json_decode($jsonContent, true);
-
+var_dump($data) ;
 if (json_last_error() !== JSON_ERROR_NONE) {
     echo json_encode([
         'success' => false,
