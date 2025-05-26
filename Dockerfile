@@ -1,12 +1,20 @@
-FROM kalilinux/kali-rolling
+# Utilisation d'une image officielle Node.js (qui contient déjà Node.js et npm)
+FROM node:18-slim
 
+# Installation de git et des dépendances système nécessaires à puppeteer
 RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y wget
+    apt-get install -y git \
+    && apt-get install -y chromium \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN wget -qO /bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.x86_64 && \
-    chmod +x /bin/ttyd
+# Définition du dossier de travail
+WORKDIR /usr/src/app
 
-EXPOSE 7681
+# Clonage du dépôt GitHub
+RUN git clone https://github.com/jacobiwoop/pupeteer.git .
 
-CMD ["/bin/bash", "-c", "/bin/ttyd -p 7681 -c root:root /bin/bash"]
+# Installation des dépendances Node.js
+RUN npm install
+
+# Commande à exécuter au démarrage
+CMD ["node", "index.js"]
