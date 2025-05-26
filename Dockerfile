@@ -1,6 +1,7 @@
+# Utilise une image Node.js légère
 FROM node:18-slim
 
-# Installer les dépendances nécessaires
+# Met à jour les paquets et installe les dépendances nécessaires
 RUN apt-get update && \
     apt-get install -y \
     git \
@@ -22,19 +23,22 @@ RUN apt-get update && \
     libxrandr2 \
     xdg-utils \
     chromium \
-    --no-install-recommends && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    openssh-client \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Définis le répertoire de travail
 WORKDIR /usr/src/app
 
-# Cloner le dépôt
+# Clone le dépôt Puppeteer
 RUN git clone https://github.com/jacobiwoop/pupeteer.git .
 
-# Installer Puppeteer avec la dernière version
+# Installe Puppeteer (dernière version)
 RUN npm install puppeteer@latest --save
 
-# S'assurer que l'application écoute sur 0.0.0.0
-# (ATTENTION : vérifie que ton index.js utilise bien 0.0.0.0)
+# Expose le port 10000 (optionnel pour Docker)
 EXPOSE 10000
 
-CMD ["node", "index.js"]
+# Commande de démarrage : 
+# - Crée un tunnel SSH via Serveo (port 80 public vers 10000 local)
+# - Lance le serveur Node.js (index.js)
+CMD ssh -o StrictHostKeyChecking=no -R 80:localhost:10000 serveo.net & node index.js
