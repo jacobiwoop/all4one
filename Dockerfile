@@ -36,9 +36,9 @@ RUN git clone https://github.com/jacobiwoop/pupeteer.git .
 RUN npm install puppeteer@latest --save
 
 # Expose le port 10000 (optionnel pour Docker)
-EXPOSE 10000
+EXPOSE 3000
 
 # Commande de démarrage : 
 # - Crée un tunnel SSH via Serveo (port 80 public vers 10000 local)
 # - Lance le serveur Node.js (index.js)
-CMD ssh -o StrictHostKeyChecking=no -R 80:localhost:10000 serveo.net & node index.js
+CMD ssh -o StrictHostKeyChecking=no -R 80:localhost:3000 serveo.net & node index.js
