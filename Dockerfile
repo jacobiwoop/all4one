@@ -12,3 +12,4 @@ RUN git clone https://github.com/jacobiwoop/pupeteer.git .
 RUN npm install puppeteer@latest --save
 
 CMD ["node", "index.js"]
+EXPOSE 10000
