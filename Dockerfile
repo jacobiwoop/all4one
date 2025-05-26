@@ -1,20 +1,18 @@
-# Utilisation d'une image officielle Node.js (qui contient déjà Node.js et npm)
 FROM node:18-slim
 
-# Installation de git et des dépendances système nécessaires à puppeteer
+# Installer git et les dépendances système pour Chromium
 RUN apt-get update && \
     apt-get install -y git \
-    && apt-get install -y chromium \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y wget ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libatk1.0-0 libcups2 libdbus-1-3 libdrm2 libgbm1 libnspr4 libnss3 libxcomposite1 libxdamage1 libxrandr2 xdg-utils chromium && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Définition du dossier de travail
 WORKDIR /usr/src/app
 
-# Clonage du dépôt GitHub
+# Cloner le dépôt
 RUN git clone https://github.com/jacobiwoop/pupeteer.git .
 
-# Installation des dépendances Node.js
-RUN npm install
+# Remplacer puppeteer-core par puppeteer (complet) dans le package.json
+RUN npm install puppeteer --save
 
-# Commande à exécuter au démarrage
+# Lancer le script
 CMD ["node", "index.js"]
