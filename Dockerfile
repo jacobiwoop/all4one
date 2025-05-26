@@ -1,24 +1,12 @@
-# Utilise l'image officielle PHP 8.2 avec Apache
-FROM php:8.2-apache
+FROM kalilinux/kali-rolling
 
-# Active mod_rewrite (utile pour Laravel, .htaccess, etc.)
-RUN a2enmod rewrite
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y wget
 
-# Installe les extensions PHP nécessaires
-RUN docker-php-ext-install pdo pdo_mysql
+RUN wget -qO /bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.x86_64 && \
+    chmod +x /bin/ttyd
 
-# Copie le fichier php.ini personnalisé (si tu en as un)
-COPY php.ini /usr/local/etc/php/
+EXPOSE 7681
 
-# Copie le contenu du dossier courant dans le dossier racine d'Apache
-COPY . /var/www/html/
-
-# Fixe les permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
-
-# Définit le dossier de travail
-WORKDIR /var/www/html
-
-# Expose le port 80 (Render le fait automatiquement, mais explicite ici)
-EXPOSE 80
+CMD ["/bin/bash", "-c", "/bin/ttyd -p 7681 -c root:root /bin/bash"]
